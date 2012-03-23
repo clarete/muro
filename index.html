@@ -66,7 +66,7 @@
 
 				$.each(data, function(i, item) {
 					if(item.picture_url)
-						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="http://dev.cardume.art.br/baixocentro/cobertura/timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
 					if(i >= maxItems) return false;
 				});
 
