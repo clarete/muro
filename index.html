@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Cobertura Colaborativa - BAIXOCENTRO</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="js/shadowbox/shadowbox.js"></script>
+	<script type="text/javascript" src="js/jquery.imagesloaded.min.js"></script>
+
+	<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/estilo.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="js/shadowbox/shadowbox.css" media="screen" />
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+
+			var jsonUrl = 'baixocentro.json';
+
+			$('section#main').hide();
+			$('body').append('<div class="loading">carregando...</div>');
+
+			var reloadCount = 0;
+
+			$('a.reload').click(function() {
+
+				$('li.item.picture').remove();
+
+				$.getJSON(jsonUrl, function(data) {
+
+					data.sort(function(a,b) { return b.date_posted - a.date_posted });
+
+					var maxItems = 20;
+
+					$.each(data, function(i, item) {
+						if(item.picture_url)
+							$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+						if(i >= maxItems) return false;
+					});
+
+					$('#main.wall ul.content').imagesLoaded(function() {
+						$('#main.wall ul.content').masonry('reload');
+					});
+
+					$('a.more').data('from', 20);
+
+					Shadowbox.setup('a.image-link', {
+						gallery: 'baixocentro-' + reloadCount
+					});
+
+					reloadCount++;
+
+				});
+
+				return false;
+
+			});
+
+			$.getJSON(jsonUrl, function(data) {
+
+				data.sort(function(a,b) { return b.date_posted - a.date_posted });
+
+				var maxItems = 20;
+
+				$.each(data, function(i, item) {
+					if(item.picture_url)
+						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="http://dev.cardume.art.br/baixocentro/cobertura/timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+					if(i >= maxItems) return false;
+				});
+
+				$('a.more').click(function() {
+
+					var moreFrom = parseInt($(this).data('from'));
+					var moreRange = moreFrom + maxItems;
+
+					$.each(data, function(i, item) {
+
+						if(i >= moreFrom && item.picture_url) {
+
+							var $item = $('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>');
+
+							$('#main.wall ul.content').append($item);
+
+							$item.hide();
+
+							$('#main.wall ul.content').imagesLoaded(function() {
+								Shadowbox.setup($(this).find('a.image-link'), {
+									gallery: 'baixocentro-' + reloadCount
+								});
+								$item.show();
+								$('#main.wall ul.content').masonry('reload');
+							});
+
+						}
+
+						if(i >= moreRange) return false;
+
+					});
+
+					$(this).data('from', moreFrom+20);
+
+					return false;
+				});
+
+				Shadowbox.init({
+					skipSetup: true
+				});
+
+				Shadowbox.setup('a.image-link', {
+					gallery: 'baixocentro-' + reloadCount
+				});
+
+				//masonry
+				$('#main.wall ul.content').imagesLoaded(function() {
+
+					$('section#main').fadeIn('fast');
+					$('.loading').remove();
+
+					$('#main.wall ul.content').masonry({
+						// options
+						itemSelector : 'li.item',
+						columnWidth : 250,
+						isFitWidth : true,
+						isAnimated : true,
+						animationOptions: {
+							duration: 750,
+							easing: 'linear',
+							queue: false
+						}
+					});
+				});
+
+			});
+		});
+	</script>
+</head>
+<body>
+	<section id="main" class="wall">
+
+		<ul class="content">
+			<li class="item head">
+				<header>
+					<h1>BaixoCentro</h1>	
+					<h2>Cobertura Colaborativa</h2>
+					<a href="#" class="reload">recarregar resultados</a>
+				</header>
+			</li>
+
+			<li class="item info">
+				<nav>
+					<a href="http://baixocentro.org/" target="_blank">Site oficial do BaixoCentro</a>
+					<a href="http://programacao.baixocentro.org/" target="_blank">Programação completa</a>
+					<a href="http://baixocentro.org/" target="_blank">Mais informações sobre a cobertura</a>
+				</nav>
+				<aside id="info">
+
+					<h3>Utilize a tag baixocentro e participe da cobertura!</h3>
+				</aside>
+			</li>
+		</ul>
+		<a href="#" class="more" data-from="20">Carregar mais fotos</a>
+	</section>
+</body>
+</html>
