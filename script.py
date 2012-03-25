@@ -42,7 +42,7 @@ class Imagem:
 class Twitter:
     def __init__(self, tag, api_key):
         self.name   = 'Twitter'
-        self.api_url = 'http://search.twitter.com/search.json?q='+tag+'&rpp=100&include_entities=true&result_type=recent'
+        self.api_url = 'http://search.twitter.com/search.json?q=' + tag + '&rpp=100&include_entities=true&result_type=recent'
         self.tag = tag
         self.api_key = api_key
         
@@ -70,7 +70,7 @@ class Twitter:
 class Instagram:
     def __init__(self, tag, api_key):
         self.name = 'Instagram'
-        self.api_url = 'https://api.instagram.com/v1/tags/baixocentro/media/recent?client_id=' + api_key
+        self.api_url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?client_id=' + api_key
         self.tag = tag
         self.api_key = api_key
         
