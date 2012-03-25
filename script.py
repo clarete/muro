@@ -42,7 +42,7 @@ class Imagem:
 class Twitter:
     def __init__(self, tag, api_key):
         self.name   = 'Twitter'
-        self.api_url = 'http://search.twitter.com/search.json?q='+tag+'&rpp=100&include_entities=true&result_type=mixed'
+        self.api_url = 'http://search.twitter.com/search.json?q='+tag+'&rpp=100&include_entities=true&result_type=recent'
         self.tag = tag
         self.api_key = api_key
         
@@ -70,7 +70,7 @@ class Twitter:
 class Instagram:
     def __init__(self, tag, api_key):
         self.name = 'Instagram'
-        self.api_url = 'https://api.instagram.com/v1/media/search?lat=-23.534933&lng=-46.65326&client_id=' + api_key + '&distance=5000'
+        self.api_url = 'https://api.instagram.com/v1/tags/baixocentro/media/recent?client_id=' + api_key
         self.tag = tag
         self.api_key = api_key
         
@@ -81,17 +81,15 @@ class Instagram:
         soap = urllib.urlopen(self.api_url)
         soap = json.load(soap)
         for raw_imagem in soap['data']:
-             if raw_imagem['caption']:
-                if tag in raw_imagem['caption']['text'] or tag in raw_imagem['tags']:
-                    imagem = Imagem()
-                    imagem.picture_url = raw_imagem['images']['standard_resolution']['url']
-                    imagem.picture_thumb = raw_imagem['images']['thumbnail']['url']
-                    imagem.author = raw_imagem['user']['username']
-                    imagem.width = raw_imagem['images']['standard_resolution']['width']
-                    imagem.height = raw_imagem['images']['standard_resolution']['height']
-                    imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['created_time'])))
-                    imagem.original_link = raw_imagem['link']
-                    pictures.append(imagem.dictit())
+            imagem = Imagem()
+            imagem.picture_url = raw_imagem['images']['standard_resolution']['url']
+            imagem.picture_thumb = raw_imagem['images']['thumbnail']['url']
+            imagem.author = raw_imagem['user']['username']
+            imagem.width = raw_imagem['images']['standard_resolution']['width']
+            imagem.height = raw_imagem['images']['standard_resolution']['height']
+            imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['created_time'])))
+            imagem.original_url = raw_imagem['link']
+            pictures.append(imagem.dictit())
         return pictures
 
 class Flickr:
