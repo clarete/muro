@@ -6,7 +6,6 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="js/shadowbox/shadowbox.js"></script>
 	<script type="text/javascript" src="js/jquery.imagesloaded.min.js"></script>
-
 	<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="css/estilo.css" media="screen" />
@@ -36,7 +35,7 @@
 
 					$.each(data, function(i, item) {
 						if(item.picture_url)
-							$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+							$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
 						if(i >= maxItems) return false;
 					});
 
@@ -49,6 +48,8 @@
 					Shadowbox.setup('a.image-link', {
 						gallery: 'baixocentro-' + reloadCount
 					});
+
+					var dataLimit = data.length;
 
 					reloadCount++;
 
@@ -66,20 +67,27 @@
 
 				$.each(data, function(i, item) {
 					if(item.picture_url)
-						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
 					if(i >= maxItems) return false;
 				});
+
+				var dataLimit = data.length;
 
 				$('a.more').click(function() {
 
 					var moreFrom = parseInt($(this).data('from'));
 					var moreRange = moreFrom + maxItems;
 
+					if(moreFrom >= dataLimit) {
+						$(this).text('não há mais fotos');
+						return false;
+					}
+
 					$.each(data, function(i, item) {
 
 						if(i >= moreFrom && item.picture_url) {
 
-							var $item = $('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="#" rel="external" target="_blank">Link original</a></p></div></li>');
+							var $item = $('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
 
 							$('#main.wall ul.content').append($item);
 
@@ -138,7 +146,6 @@
 </head>
 <body>
 	<section id="main" class="wall">
-
 		<ul class="content">
 			<li class="item head">
 				<header>
@@ -147,7 +154,6 @@
 					<a href="#" class="reload">recarregar resultados</a>
 				</header>
 			</li>
-
 			<li class="item info">
 				<nav>
 					<a href="http://baixocentro.org/" target="_blank">Site oficial do BaixoCentro</a>
@@ -155,7 +161,6 @@
 					<a href="http://baixocentro.org/" target="_blank">Mais informações sobre a cobertura</a>
 				</nav>
 				<aside id="info">
-
 					<h3>Utilize a tag baixocentro e participe da cobertura!</h3>
 				</aside>
 			</li>

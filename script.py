@@ -122,7 +122,7 @@ flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
 twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
 instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
 lista_de_fotos = flickr + twitter + instagram
-lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'))
+lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
 a = open(tag+'.json','w')
 a.write(json.dumps(lista_de_fotos))
 a.close()
