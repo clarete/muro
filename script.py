@@ -117,11 +117,33 @@ class Flickr:
             pictures.append(imagem.dictit())
         return pictures
 
+class Picasa:
+    def __init__(self, tag):
+        self.name = 'Picasa'
+        self.api_url = 'https://picasaweb.google.com/data/feed/base/all?alt=json&kind=photo&access=public&filter=1&q=' + tag + '&imgmax=1600&hl=pt_BR'
+        self.tag = tag
+
+    def getPictures(self):
+        print 'Getting ' + self.name
+        print self.api_url
+        pictures = []
+        soap = urllib.urlopen(self.api_url)
+        soap = json.load(soap)
+        for raw_imagem in soap['feed']['entry']:
+            imagem = Imagem()
+            imagem.author = [x['name']['$t'] for x in raw_imagem['author']]
+            imagem.picture_url = raw_imagem['content']['src']
+            imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['published']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
+            imagem.original_url = [x['href'] for x in raw_imagem['link']][2]
+            pictures.append(imagem.dictit())
+        return pictures
+
 tag = 'baixocentro'
 flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
 twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
 instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
-lista_de_fotos = flickr + twitter + instagram
+picasa = Picasa(tag).getPictures()
+lista_de_fotos = flickr + twitter + instagram + picasa
 lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
 a = open(tag+'.json','w')
 a.write(json.dumps(lista_de_fotos))

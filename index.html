@@ -35,7 +35,7 @@
 
 					$.each(data, function(i, item) {
 						if(item.picture_url)
-							$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+							$('<li id="item-' + i + '" class="item picture ' + item.date_posted + '"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
 						if(i >= maxItems) return false;
 					});
 
@@ -67,7 +67,7 @@
 
 				$.each(data, function(i, item) {
 					if(item.picture_url)
-						$('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
+						$('<li id="item-' + i + '" class="item picture ' + item.date_posted + '"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>').appendTo('#main.wall ul');;
 					if(i >= maxItems) return false;
 				});
 
@@ -87,7 +87,7 @@
 
 						if(i >= moreFrom && item.picture_url) {
 
-							var $item = $('<li id="item-' + i + '" class="item picture"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
+							var $item = $('<li id="item-' + i + '" class="item picture ' + item.date_posted + '"><a class="image-link" href="' + item.picture_url + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.picture_url + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
 
 							$('#main.wall ul.content').append($item);
 
