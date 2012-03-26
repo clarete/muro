@@ -14,7 +14,8 @@ except:
 #        width: ,
 #        height:,
 #        date_posted:,
-#        media_type:
+#        media_type:,
+#        media_provider:
 #       }
 class Media:
     def __init__(self):
@@ -26,6 +27,7 @@ class Media:
         self.date_posted = datetime.datetime.now()
         self.original_url = None
         self.media_type = None
+        self.media_provider = None
         
     def dictit(self):
         img = {
@@ -36,7 +38,8 @@ class Media:
             'height' : self.height,
             'date_posted' : self.date_posted,
             'original_url': self.original_url,
-            'media_type' : self.media_type
+            'media_type' : self.media_type,
+            'media_provider' : self.media_provider
             }
         return img
     def timestamp(self, dt):
@@ -60,6 +63,7 @@ class Twitter:
                 if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):
                     imagem = Media()
                     imagem.media_type = 'image'
+                    imagem.media_provider = lower(self.name)
                     imagem.content = raw_imagem['entities']['media'][0]['media_url']
                     imagem.thumb = raw_imagem['entities']['media'][0]['media_url']
                     imagem.author = raw_imagem['from_user']
@@ -87,6 +91,7 @@ class Instagram:
         for raw_imagem in soap['data']:
             imagem = Media()
             imagem.media_type = 'image'
+            imagem.media_provider = lower(self.name)
             imagem.content = raw_imagem['images']['standard_resolution']['url']
             imagem.thumb = raw_imagem['images']['thumbnail']['url']
             imagem.author = raw_imagem['user']['username']
@@ -113,6 +118,7 @@ class Flickr:
             if raw_imagem.has_key('url_l'):
                 imagem = Media()
                 imagem.media_type = 'Image'
+                imagem.media_provider = lower(self.name)
                 imagem.thumb = raw_imagem['url_t']
                 imagem.author = raw_imagem['ownername']
                 imagem.content = raw_imagem['url_l']
@@ -138,6 +144,7 @@ class Picasa:
         for raw_imagem in soap['feed']['entry']:
             imagem = Media()
             imagem.media_type = 'image'
+            imagem.media_provider = lower(self.name)
             imagem.author = [x['name']['$t'] for x in raw_imagem['author']]
             imagem.content = raw_imagem['content']['src']
             imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['published']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
@@ -160,6 +167,7 @@ class Youtube:
         for raw_video in soap['feed']['entry']:
             video = Media()
             video.media_type = 'video' 
+            video.media_provider = lower(self.name)
             video.content = raw_video['media$group']['media$content'][0]['url']
             video.thumb = raw_video['media$group']['media$thumbnail'][0]['url']
             video.author = raw_video['author'][0]['name']['$t']
