@@ -25,7 +25,7 @@ strong {
 	z-index: 1;
 }
 
-#main.wall ul li.picture:hover {
+#main.wall ul li.media.image:hover {
 	-webkit-transform: scale(1.2);
 	-khtml-transform: scale(1.2);
 	-moz-transform: scale(1.2);
@@ -39,6 +39,21 @@ strong {
 	z-index: 2;
 }
 
+#main.wall ul li.video {
+	width: 490px !important;
+}
+
+#main.wall ul li.video object,
+#main.wall ul li.video object embed {
+	display: block;
+	width: 490px;
+	height: 275px;
+}
+
+#main.wall ul li.video .meta {
+	width: 470px;
+}
+
 #main.wall ul li.item.info,
 #main.wall ul li.item.head {
 	z-index: 2;
@@ -49,7 +64,7 @@ strong {
 }
 
 #main.wall ul li .meta {
-	width: 220px !important;
+	width: 220px;
 	overflow: hidden;
 	padding: 10px;
 	color: #e7b900;

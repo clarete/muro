@@ -117,7 +117,7 @@ class Flickr:
         for raw_imagem in soap['photos']['photo']:
             if raw_imagem.has_key('url_l'):
                 imagem = Media()
-                imagem.media_type = 'Image'
+                imagem.media_type = 'image'
                 imagem.media_provider = self.name.lower()
                 imagem.thumb = raw_imagem['url_t']
                 imagem.author = raw_imagem['ownername']
