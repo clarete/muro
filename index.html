@@ -25,7 +25,7 @@
 
 				data.sort(function(a,b) { return b.date_posted - a.date_posted });
 
-				var maxItems = 30;
+				var maxItems = 20;
 
 				$.each(data, function(i, item) {
 					generateContent(i, item);
@@ -47,8 +47,6 @@
 					$.each(data, function(i, item) {
 
 						if(i >= moreFrom && item.content) {
-
-						//	alert(item.media_type);
 
 							if(item.media_type == 'image')
 								var $item = $('<li id="item-' + i + '" class="item media image ' + item.date_posted + '"><a class="image-link" href="' + item.content + '" rel="shadowbox[baixocentro]" title="' + item.author + '"><img class="pic" width="240" src="timthumb.php?src=' + item.content + '&w=240" /></a><div class="meta"><p class="author">Autor: <strong>' + item.author + '</strong></p><p class="link"><a href="' + item.original_url + '" rel="external" target="_blank">Link original</a></p></div></li>');
