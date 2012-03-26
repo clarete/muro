@@ -8,12 +8,13 @@ except:
     pass
 
 # JSON Sample
-# [0]  { picture_url: ,
-#        picture_thumb: , 
+# [0]  { content: ,
+#        thumb: , 
 #        author: ,   
 #        width: ,
 #        height:,
-#        date_posted:
+#        date_posted:,
+#        media_type:
 #       }
 class Media:
     def __init__(self):
