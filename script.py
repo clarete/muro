@@ -138,13 +138,42 @@ class Picasa:
             pictures.append(imagem.dictit())
         return pictures
 
-tag = 'baixocentro'
-flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
-twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
-instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
-picasa = Picasa(tag).getPictures()
-lista_de_fotos = flickr + twitter + instagram + picasa
-lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
-a = open(tag+'.json','w')
-a.write(json.dumps(lista_de_fotos))
-a.close()
+class Youtube:
+    def __init__(self, tag):
+        self.name = 'Youtube'
+        self.api_url = 'http://gdata.youtube.com/feeds/api/videos/-/' + tag + '?alt=json'
+        self.tag = tag
+    
+    def getVideos(self):
+        print 'Getting ' + self.name
+        print self.api_url
+        videos = []
+        soap = urllib.urlopen(self.api_url)
+        soap = json.load(soap)
+        for raw_video in soap['feed']['entry']:
+            video = Imagem() #huh?!
+            video.picture_url = raw_video['media$group']['media$content'][0]['url']
+            video.picture_thumb = raw_video['media$group']['media$thumbnail'][0]['url']
+            video.author = raw_video['author'][0]['name']['$t']
+            video.width = raw_video['media$group']['media$thumbnail'][0]['width']
+            video.height = raw_video['media$group']['media$thumbnail'][0]['height']
+            video.date_posted = video.timestamp(datetime.datetime.strptime(raw_video['updated']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
+            video.original_url = raw_video['link'][0]['href']
+            videos.append(video.dictit())
+        return videos
+            
+
+def rockndroll():
+    tag = 'baixocentro'
+    flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
+    twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
+    instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
+    picasa = Picasa(tag).getPictures()
+    youtube = Youtube(tag).getVideos()
+    lista_de_fotos = flickr + twitter + instagram + picasa + youtube
+    lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
+    a = open(tag+'.json','w')
+    a.write(json.dumps(lista_de_fotos))
+    a.close()
+
+rockndroll()
