@@ -15,25 +15,27 @@ except:
 #        height:,
 #        date_posted:
 #       }
-class Imagem:
+class Media:
     def __init__(self):
-        self.picture_url = None
-        self.picture_thumb = None
+        self.content = None
+        self.thumb = None
         self.author = None
         self.width = 0
         self.height = 0
         self.date_posted = datetime.datetime.now()
         self.original_url = None
+        self.media_type = None
         
     def dictit(self):
         img = {
-            'picture_url' : self.picture_url,
-            'picture_thumb' : self.picture_thumb,
+            'content' : self.content,
+            'thumb' : self.thumb,
             'author' : self.author,
             'width' : self.width,
             'height' : self.height,
             'date_posted' : self.date_posted,
-            'original_url': self.original_url
+            'original_url': self.original_url,
+            'media_type' : self.media_type
             }
         return img
     def timestamp(self, dt):
@@ -55,9 +57,10 @@ class Twitter:
             soap = json.load(soap)
             for raw_imagem in soap['results']:
                 if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):
-                    imagem = Imagem()
-                    imagem.picture_url = raw_imagem['entities']['media'][0]['media_url']
-                    imagem.picture_thumb = raw_imagem['entities']['media'][0]['media_url']
+                    imagem = Media()
+                    imagem.media_type = 'image'
+                    imagem.content = raw_imagem['entities']['media'][0]['media_url']
+                    imagem.thumb = raw_imagem['entities']['media'][0]['media_url']
                     imagem.author = raw_imagem['from_user']
                     imagem.width = raw_imagem['entities']['media'][0]['sizes']['orig']['w']
                     imagem.height = raw_imagem['entities']['media'][0]['sizes']['orig']['h']
@@ -81,9 +84,10 @@ class Instagram:
         soap = urllib.urlopen(self.api_url)
         soap = json.load(soap)
         for raw_imagem in soap['data']:
-            imagem = Imagem()
-            imagem.picture_url = raw_imagem['images']['standard_resolution']['url']
-            imagem.picture_thumb = raw_imagem['images']['thumbnail']['url']
+            imagem = Media()
+            imagem.media_type = 'image'
+            imagem.content = raw_imagem['images']['standard_resolution']['url']
+            imagem.thumb = raw_imagem['images']['thumbnail']['url']
             imagem.author = raw_imagem['user']['username']
             imagem.width = raw_imagem['images']['standard_resolution']['width']
             imagem.height = raw_imagem['images']['standard_resolution']['height']
@@ -105,16 +109,17 @@ class Flickr:
         soap = urllib.urlopen(self.api_url)
         soap = json.load(soap)
         for raw_imagem in soap['photos']['photo']:
-            imagem = Imagem()
-            imagem.picture_thumb = raw_imagem['url_t']
-            imagem.author = raw_imagem['ownername']
             if raw_imagem.has_key('url_l'):
-                imagem.picture_url = raw_imagem['url_l']
+                imagem = Media()
+                imagem.media_type = 'Image'
+                imagem.thumb = raw_imagem['url_t']
+                imagem.author = raw_imagem['ownername']
+                imagem.content = raw_imagem['url_l']
                 imagem.width = raw_imagem['width_l']
                 imagem.height = raw_imagem['height_l']
-            imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['dateupload'])))
-            imagem.original_url = 'http://www.flickr.com/photos/' + raw_imagem['owner'] + '/' + raw_imagem['id'] + '/'
-            pictures.append(imagem.dictit())
+                imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['dateupload'])))
+                imagem.original_url = 'http://www.flickr.com/photos/' + raw_imagem['owner'] + '/' + raw_imagem['id'] + '/'
+                pictures.append(imagem.dictit())
         return pictures
 
 class Picasa:
@@ -130,9 +135,10 @@ class Picasa:
         soap = urllib.urlopen(self.api_url)
         soap = json.load(soap)
         for raw_imagem in soap['feed']['entry']:
-            imagem = Imagem()
+            imagem = Media()
+            imagem.media_type = 'image'
             imagem.author = [x['name']['$t'] for x in raw_imagem['author']]
-            imagem.picture_url = raw_imagem['content']['src']
+            imagem.content = raw_imagem['content']['src']
             imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['published']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
             imagem.original_url = [x['href'] for x in raw_imagem['link']][2]
             pictures.append(imagem.dictit())
@@ -151,9 +157,10 @@ class Youtube:
         soap = urllib.urlopen(self.api_url)
         soap = json.load(soap)
         for raw_video in soap['feed']['entry']:
-            video = Imagem() #huh?!
-            video.picture_url = raw_video['media$group']['media$content'][0]['url']
-            video.picture_thumb = raw_video['media$group']['media$thumbnail'][0]['url']
+            video = Media()
+            video.media_type = 'video' 
+            video.content = raw_video['media$group']['media$content'][0]['url']
+            video.thumb = raw_video['media$group']['media$thumbnail'][0]['url']
             video.author = raw_video['author'][0]['name']['$t']
             video.width = raw_video['media$group']['media$thumbnail'][0]['width']
             video.height = raw_video['media$group']['media$thumbnail'][0]['height']
