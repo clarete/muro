@@ -1,5 +1,12 @@
+# -*- Mode: Python, Coding: utf-8; -*-
+
 config = {
+    'twitter': {
+        'consumer_key': '',
+        'consumer_secret': '',
+        'access_token': '-Zt5RYK9faunVJTx1Lpxgoh58eb1xIELDfGkDlh4o',
+        'access_token_secret': '',
+    },
     'flickr_apikey' : 'defina a chave',
-    'twitter_apikey' : 'defina a chave',
-    'instagram_apikey' : 'defina a chave'
-    }
+    'instagram_apikey' : 'defina a chave',
+}

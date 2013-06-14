@@ -2,6 +2,7 @@
 import json
 import urllib
 import time
+import twitter as twitter_backend
 from operator import itemgetter
 from datetime import datetime
 from settings import config
@@ -11,11 +12,13 @@ def timestamp(dt):
     return 1000 * time.mktime(dt.timetuple())
 
 
-def twitter(tag, api_key):
+def twitter(tag, conf):
     name = 'Twitter'
-    api_url = 'http://search.twitter.com/search.json'
-
-    items = []
+    client = twitter_backend.Twitter(
+        auth=twitter_backend.OAuth(
+            conf['access_token'], conf['access_token_secret'],
+            conf['consumer_key'], conf['consumer_secret'])
+    )
 
     params = {
         'q': tag,
@@ -24,36 +27,29 @@ def twitter(tag, api_key):
         'result_type': 'recent',
     }
 
-    for i in range(1, 6):  # pega 500 results
-        params.update({'page': i})
+    items = []
 
-        url = '{0}?{1}'.format(api_url, urllib.urlencode(params))
-        data = json.load(urllib.urlopen(url))
+    data = client.search.tweets(**params)
 
-        # Sanity checks again
-        if 'results' not in data:
+    for item in data['statuses']:
+        # Sanity check to proceed retrieving things
+        if not 'media' in item['entities']:
             continue
 
-        for item in data['results']:
-            # Sanity check to proceed retrieving things
-            if not ('entities' in item and
-                    'media' in item['entities']):
-                continue
-
-            # Building the Media item that will be added to the return list
-            items.append({
-                'media_provider': name.lower(),
-                'media_type': 'image',
-                'content': item['entities']['media'][0]['media_url'],
-                'thumb': item['entities']['media'][0]['media_url'],
-                'author': item['from_user'],
-                'width': item['entities']['media'][0]['sizes']['orig']['w'],
-                'height': item['entities']['media'][0]['sizes']['orig']['h'],
-                'original_url': item['entities']['media'][0]['expanded_url'],
-                'date_posted': timestamp(datetime.strptime(
-                    item['created_at'],
-                    "%a, %d %b %Y %H:%M:%S +0000")),
-            })
+        # Building the Media item that will be added to the return list
+        items.append({
+            'media_provider': name.lower(),
+            'media_type': 'image',
+            'content': item['entities']['media'][0]['media_url'],
+            'thumb': item['entities']['media'][0]['media_url'],
+            'author': item['from_user'],
+            'width': item['entities']['media'][0]['sizes']['orig']['w'],
+            'height': item['entities']['media'][0]['sizes']['orig']['h'],
+            'original_url': item['entities']['media'][0]['expanded_url'],
+            'date_posted': timestamp(datetime.strptime(
+                item['created_at'],
+                "%a, %d %b %Y %H:%M:%S +0000")),
+        })
     return items
 
 
@@ -186,11 +182,12 @@ def rockndroll():
     tag = 'baixocentro'
 
     data = (
-        flickr(tag, config['flickr_apikey']) +
-        twitter(tag, config['twitter_apikey']) +
-        instagram(tag, config['instagram_apikey']) +
-        picasa(tag) +
-        youtube(tag))
+        # flickr(tag, config['flickr_apikey']) +
+        twitter(tag, config['twitter'])
+        # instagram(tag, config['instagram_apikey']) +
+        # picasa(tag) +
+        # youtube(tag)
+    )
     data = sorted(data, key=itemgetter('date_posted'), reverse=True)
 
     with open('{0}.json'.format(tag), 'w') as f:
