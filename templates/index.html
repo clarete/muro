@@ -3,20 +3,44 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Cobertura Colaborativa - BAIXOCENTRO</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript" src="js/shadowbox/shadowbox.js"></script>
-	<script type="text/javascript" src="js/jquery.imagesloaded.min.js"></script>
-	<script type="text/javascript" src="js/jquery.masonry.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="css/estilo.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="js/shadowbox/shadowbox.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}" media="screen">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}" media="screen">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/shadowbox/shadowbox.css') }}" media="screen">
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+</head>
+<body>
+	<section id="main" class="wall">
+		<ul class="content">
+			<li class="item head">
+				<header>
+					<h1>BaixoCentro</h1>	
+					<h2>Cobertura Colaborativa</h2>
+					<a href="#" class="reload">recarregar resultados</a>
+				</header>
+			</li>
+			<li class="item info">
+				<nav>
+					<a href="http://baixocentro.org/" target="_blank">Site oficial do BaixoCentro</a>
+					<a href="http://programacao.baixocentro.org/" target="_blank">Programação completa</a>
+					<a href="http://baixocentro.org/" target="_blank">Mais informações sobre a cobertura</a>
+				</nav>
+				<aside id="info">
+					<h3>Utilize a tag baixocentro e participe da cobertura!</h3>
+				</aside>
+			</li>
+		</ul>
+		<a href="#" class="more" data-from="20">Carregar mais fotos</a>
+	</section>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/shadowbox/shadowbox.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.imagesloaded.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.masonry.min.js') }}"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function($) {
 
-			var jsonUrl = 'baixocentro.json';
+			var jsonUrl = '{{ url_for('static', filename='baixocentro.json') }}';
 
 			$('section#main').hide();
 			$('body').append('<div class="loading">carregando...</div>');
@@ -159,29 +183,6 @@
 			}
 		}
 	</script>
-</head>
-<body>
-	<section id="main" class="wall">
-		<ul class="content">
-			<li class="item head">
-				<header>
-					<h1>BaixoCentro</h1>	
-					<h2>Cobertura Colaborativa</h2>
-					<a href="#" class="reload">recarregar resultados</a>
-				</header>
-			</li>
-			<li class="item info">
-				<nav>
-					<a href="http://baixocentro.org/" target="_blank">Site oficial do BaixoCentro</a>
-					<a href="http://programacao.baixocentro.org/" target="_blank">Programação completa</a>
-					<a href="http://baixocentro.org/" target="_blank">Mais informações sobre a cobertura</a>
-				</nav>
-				<aside id="info">
-					<h3>Utilize a tag baixocentro e participe da cobertura!</h3>
-				</aside>
-			</li>
-		</ul>
-		<a href="#" class="more" data-from="20">Carregar mais fotos</a>
-	</section>
 </body>
 </html>
+
