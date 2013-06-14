@@ -182,11 +182,11 @@ def rockndroll():
     tag = 'baixocentro'
 
     data = (
-        # flickr(tag, config['flickr_apikey']) +
-        twitter(tag, config['twitter'])
-        # instagram(tag, config['instagram_apikey']) +
-        # picasa(tag) +
-        # youtube(tag)
+        flickr(tag, config['flickr_apikey']) +
+        twitter(tag, config['twitter']) +
+        instagram(tag, config['instagram_apikey']) +
+        picasa(tag) +
+        youtube(tag)
     )
     data = sorted(data, key=itemgetter('date_posted'), reverse=True)
 
