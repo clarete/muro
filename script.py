@@ -1,195 +1,281 @@
-import json, urllib, datetime, time, os,sys
+# -*- coding: utf-8; -*-
+import json
+import urllib
+import time
 from operator import itemgetter
-import settings
+from datetime import datetime
+from settings import config
 
-try:
-    os.chdir(os.path.dirname(sys.argv[0]))
-except:
-    pass
 
-# JSON Sample
-# [0]  { content: ,
-#        thumb: , 
-#        author: ,   
-#        width: ,
-#        height:,
-#        date_posted:,
-#        media_type:,
-#        media_provider:
-#       }
-class Media:
+class Media(object):
+    """Format of a media object
+
+    Each object has the following keys:
+
+     * content
+     * thumb
+     * author
+     * width
+     * height
+     * date_posted
+     * media_type
+     * media_provider
+    """
     def __init__(self):
         self.content = None
         self.thumb = None
         self.author = None
         self.width = 0
         self.height = 0
-        self.date_posted = datetime.datetime.now()
+        self.date_posted = datetime.now()
         self.original_url = None
         self.media_type = None
         self.media_provider = None
-        
+
     def dictit(self):
-        img = {
-            'content' : self.content,
-            'thumb' : self.thumb,
-            'author' : self.author,
-            'width' : self.width,
-            'height' : self.height,
-            'date_posted' : self.date_posted,
+        return {
+            'content': self.content,
+            'thumb': self.thumb,
+            'author': self.author,
+            'width': self.width,
+            'height': self.height,
+            'date_posted': self.date_posted,
             'original_url': self.original_url,
-            'media_type' : self.media_type,
-            'media_provider' : self.media_provider
-            }
-        return img
+            'media_type': self.media_type,
+            'media_provider': self.media_provider
+        }
+
     def timestamp(self, dt):
         return 1000 * time.mktime(dt.timetuple())
-        
-class Twitter:
+
+
+class Twitter(object):
     def __init__(self, tag, api_key):
-        self.name   = 'Twitter'
-        self.api_url = 'http://search.twitter.com/search.json?q=' + tag + '&rpp=100&include_entities=true&result_type=recent'
+        self.name = 'Twitter'
         self.tag = tag
         self.api_key = api_key
-        
-    def getPictures(self):
-        print 'Getting ' + self.name
-        print self.api_url
-        pictures = []
-        for i in range(1,6): #pega 500 results
-            soap = urllib.urlopen(self.api_url + '&page=' + str(i))
-            soap = json.load(soap)
-            for raw_imagem in soap['results']:
-                if raw_imagem.has_key('entities') and raw_imagem['entities'].has_key('media'):
-                    imagem = Media()
-                    imagem.media_type = 'image'
-                    imagem.media_provider = self.name.lower()
-                    imagem.content = raw_imagem['entities']['media'][0]['media_url']
-                    imagem.thumb = raw_imagem['entities']['media'][0]['media_url']
-                    imagem.author = raw_imagem['from_user']
-                    imagem.width = raw_imagem['entities']['media'][0]['sizes']['orig']['w']
-                    imagem.height = raw_imagem['entities']['media'][0]['sizes']['orig']['h']
-                    imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['created_at'], "%a, %d %b %Y %H:%M:%S +0000"))
-                    imagem.original_url = raw_imagem['entities']['media'][0]['expanded_url']
-                    pictures.append(imagem.dictit())
-        return pictures
-                
+        self.api_url = 'http://search.twitter.com/search.json'
 
-class Instagram:
-    def __init__(self, tag, api_key):
-        self.name = 'Instagram'
-        self.api_url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?client_id=' + api_key
-        self.tag = tag
-        self.api_key = api_key
-        
     def getPictures(self):
         print 'Getting ' + self.name
         print self.api_url
-        pictures = []
-        soap = urllib.urlopen(self.api_url)
-        soap = json.load(soap)
-        for raw_imagem in soap['data']:
-            imagem = Media()
-            imagem.media_type = 'image'
-            imagem.media_provider = self.name.lower()
-            imagem.content = raw_imagem['images']['standard_resolution']['url']
-            imagem.thumb = raw_imagem['images']['thumbnail']['url']
-            imagem.author = raw_imagem['user']['username']
-            imagem.width = raw_imagem['images']['standard_resolution']['width']
-            imagem.height = raw_imagem['images']['standard_resolution']['height']
-            imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['created_time'])))
-            imagem.original_url = raw_imagem['link']
-            pictures.append(imagem.dictit())
-        return pictures
 
-class Flickr:
-    def __init__(self, tag, api_key):
-        self.name   = 'Flickr'
-        self.api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + api_key +'&text=' + tag +'&sort=&per_page=500&format=json&nojsoncallback=1&extras=owner_name,date_upload,url_t,url_l'
-        self.tag = tag
-        
-    def getPictures(self):
-        print 'Getting ' + self.name
-        print self.api_url
         pictures = []
-        soap = urllib.urlopen(self.api_url)
-        soap = json.load(soap)
-        for raw_imagem in soap['photos']['photo']:
-            if raw_imagem.has_key('url_l'):
+
+        params = {
+            'q': self.tag,
+            'rpp': 100,
+            'include_entities': True,
+            'result_type': 'recent',
+        }
+
+        for i in range(1, 6):  # pega 500 results
+            params.update({'page': i})
+
+            url = '{0}?{1}'.format(self.api_url, urllib.urlencode(params))
+            data = json.load(urllib.urlopen(url))
+
+            # Sanity checks again
+            if 'results' not in data:
+                continue
+
+            for item in data['results']:
+                # Sanity check to proceed retrieving things
+                if not ('entities' in item and
+                        'media' in item['entities']):
+                    continue
+
+                # Building the Media item that will be added to the return list
                 imagem = Media()
                 imagem.media_type = 'image'
                 imagem.media_provider = self.name.lower()
-                imagem.thumb = raw_imagem['url_t']
-                imagem.author = raw_imagem['ownername']
-                imagem.content = raw_imagem['url_l']
-                imagem.width = raw_imagem['width_l']
-                imagem.height = raw_imagem['height_l']
-                imagem.date_posted = imagem.timestamp(datetime.datetime.fromtimestamp(float(raw_imagem['dateupload'])))
-                imagem.original_url = 'http://www.flickr.com/photos/' + raw_imagem['owner'] + '/' + raw_imagem['id'] + '/'
+                imagem.content = \
+                    item['entities']['media'][0]['media_url']
+                imagem.thumb = item['entities']['media'][0]['media_url']
+                imagem.author = item['from_user']
+                imagem.width = \
+                    item['entities']['media'][0]['sizes']['orig']['w']
+                imagem.height = \
+                    item['entities']['media'][0]['sizes']['orig']['h']
+
+                date_posted = datetime.strptime(
+                    item['created_at'], "%a, %d %b %Y %H:%M:%S +0000")
+                imagem.date_posted = \
+                    imagem.timestamp(date_posted)
+
+                imagem.original_url = \
+                    item['entities']['media'][0]['expanded_url']
                 pictures.append(imagem.dictit())
         return pictures
 
-class Picasa:
+
+class Instagram(object):
+    def __init__(self, tag, api_key):
+        self.name = 'Instagram'
+        self.tag = tag
+        self.api_key = api_key
+        self.api_url = (
+            'https://api.instagram.com/'
+            'v1/tags/{0}/media/recent?client_id={1}'.format(tag, api_key))
+
+    def getPictures(self):
+        print 'Getting ' + self.name
+        print self.api_url
+
+        pictures = []
+
+        data = json.load(urllib.urlopen(self.api_url))
+
+        for item in data['data']:
+            imagem = Media()
+            imagem.media_type = 'image'
+            imagem.media_provider = self.name.lower()
+            imagem.content = item['images']['standard_resolution']['url']
+            imagem.thumb = item['images']['thumbnail']['url']
+            imagem.author = item['user']['username']
+            imagem.width = item['images']['standard_resolution']['width']
+            imagem.height = item['images']['standard_resolution']['height']
+
+            date_posted = datetime.fromtimestamp(float(item['created_time']))
+            imagem.date_posted = imagem.timestamp(date_posted)
+            imagem.original_url = item['link']
+            pictures.append(imagem.dictit())
+        return pictures
+
+
+class Flickr(object):
+    def __init__(self, tag, api_key):
+        self.name = 'Flickr'
+        self.tag = tag
+        self.api_url = 'http://api.flickr.com/services/rest/'
+        self.api_key = api_key
+
+    def getPictures(self):
+        print 'Getting ' + self.name
+        print self.api_url
+
+        pictures = []
+
+        params = {
+            'method': 'flickr.photos.search',
+            'api_key': self.api_key,
+            'text': self.tag,
+            'per_page': 500,
+            'format': 'json',
+            'nojsoncallback': 1,
+            'extras': 'owner_name,date_upload,url_t,url_l',
+        }
+
+        url = '{0}?{1}'.format(self.api_url, urllib.urlencode(params))
+        data = json.load(urllib.urlopen(url))
+
+        for item in data['photos']['photo']:
+            # Sanity checks
+            if 'url_l' in item:
+                imagem = Media()
+                imagem.media_type = 'image'
+                imagem.media_provider = self.name.lower()
+                imagem.thumb = item['url_t']
+                imagem.author = item['ownername']
+                imagem.content = item['url_l']
+                imagem.width = item['width_l']
+                imagem.height = item['height_l']
+                imagem.date_posted = imagem.timestamp(
+                    datetime.fromtimestamp(float(item['dateupload'])))
+                imagem.original_url = \
+                    'http://www.flickr.com/photos/{0}/{1}'.format(
+                        item['owner'], item['id'])
+                pictures.append(imagem.dictit())
+        return pictures
+
+
+class Picasa(object):
     def __init__(self, tag):
         self.name = 'Picasa'
-        self.api_url = 'https://picasaweb.google.com/data/feed/base/all?alt=json&kind=photo&access=public&filter=1&q=' + tag + '&imgmax=1600&hl=pt_BR'
+        self.api_url = 'https://picasaweb.google.com/data/feed/base/all'
         self.tag = tag
 
     def getPictures(self):
         print 'Getting ' + self.name
         print self.api_url
+
         pictures = []
-        soap = urllib.urlopen(self.api_url)
-        soap = json.load(soap)
-        for raw_imagem in soap['feed']['entry']:
+
+        params = {
+            'alt': 'json',
+            'kind': 'photo',
+            'access': 'public',
+            'filter': 1,
+            'imgmax': 1600,
+            'hl': 'pt_BR',
+            'q': self.tag,
+        }
+
+        url = '{0}?{1}'.format(self.api_url, urllib.urlencode(params))
+        data = json.load(urllib.urlopen(url))
+
+        for item in data['feed']['entry']:
             imagem = Media()
             imagem.media_type = 'image'
             imagem.media_provider = self.name.lower()
-            imagem.author = [x['name']['$t'] for x in raw_imagem['author']]
-            imagem.content = raw_imagem['content']['src']
-            imagem.date_posted = imagem.timestamp(datetime.datetime.strptime(raw_imagem['published']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
-            imagem.original_url = [x['href'] for x in raw_imagem['link']][2]
+            imagem.author = [x['name']['$t'] for x in item['author']]
+            imagem.content = item['content']['src']
+            imagem.date_posted = imagem.timestamp(
+                datetime.strptime(
+                    item['published']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
+            imagem.original_url = [x['href'] for x in item['link']][2]
             pictures.append(imagem.dictit())
         return pictures
 
-class Youtube:
+
+class Youtube(object):
     def __init__(self, tag):
         self.name = 'Youtube'
-        self.api_url = 'http://gdata.youtube.com/feeds/api/videos/-/' + tag + '?alt=json'
         self.tag = tag
-    
+        self.api_url = (
+            'http://gdata.youtube.com'
+            '/feeds/api/videos/-/{0}?alt=json'.format(tag))
+
     def getVideos(self):
         print 'Getting ' + self.name
         print self.api_url
+
         videos = []
-        soap = urllib.urlopen(self.api_url)
-        soap = json.load(soap)
-        for raw_video in soap['feed']['entry']:
+
+        data = json.load(urllib.urlopen(self.api_url))
+
+        for item in data['feed']['entry']:
             video = Media()
-            video.media_type = 'video' 
+            video.media_type = 'video'
             video.media_provider = self.name.lower()
-            video.content = raw_video['media$group']['media$content'][0]['url']
-            video.thumb = raw_video['media$group']['media$thumbnail'][0]['url']
-            video.author = raw_video['author'][0]['name']['$t']
-            video.width = raw_video['media$group']['media$thumbnail'][0]['width']
-            video.height = raw_video['media$group']['media$thumbnail'][0]['height']
-            video.date_posted = video.timestamp(datetime.datetime.strptime(raw_video['updated']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
-            video.original_url = raw_video['link'][0]['href']
+            video.content = item['media$group']['media$content'][0]['url']
+            video.thumb = item['media$group']['media$thumbnail'][0]['url']
+            video.author = item['author'][0]['name']['$t']
+            video.width = item['media$group']['media$thumbnail'][0]['width']
+            video.height = item['media$group']['media$thumbnail'][0]['height']
+            video.date_posted = video.timestamp(
+                datetime.strptime(
+                    item['updated']['$t'], "%Y-%m-%dT%H:%M:%S.000Z"))
+            video.original_url = item['link'][0]['href']
             videos.append(video.dictit())
         return videos
-            
+
 
 def rockndroll():
     tag = 'baixocentro'
-    flickr = Flickr(tag, settings.config['flickr_apikey']).getPictures()
-    twitter = Twitter(tag, settings.config['twitter_apikey']).getPictures()
-    instagram = Instagram(tag, settings.config['instagram_apikey']).getPictures()
+
+    flickr = Flickr(tag, config['flickr_apikey']).getPictures()
+    twitter = Twitter(tag, config['twitter_apikey']).getPictures()
+    instagram = Instagram(tag, config['instagram_apikey']).getPictures()
     picasa = Picasa(tag).getPictures()
     youtube = Youtube(tag).getVideos()
-    lista_de_fotos = flickr + twitter + instagram + picasa + youtube
-    lista_de_fotos = sorted(lista_de_fotos, key=itemgetter('date_posted'), reverse=True)
-    a = open(tag+'.json','w')
-    a.write(json.dumps(lista_de_fotos))
-    a.close()
 
-rockndroll()
+    data = flickr + twitter + instagram + picasa + youtube
+    data = sorted(data, key=itemgetter('date_posted'), reverse=True)
+
+    with open('{0}.json'.format(tag), 'w') as f:
+        f.write(json.dumps(data))
+
+
+if __name__ == '__main__':
+    rockndroll()
