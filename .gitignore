@@ -1,4 +1,4 @@
 *.json
 *.pyc
 settings.py
-cache/*
+muro/cache/*
