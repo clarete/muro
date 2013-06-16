@@ -10,6 +10,7 @@ CACHE_DIR = os.path.abspath('cache')
 
 
 app = Flask(__name__)
+app.debug = True
 
 
 @app.route('/')
