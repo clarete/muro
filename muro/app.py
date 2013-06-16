@@ -6,7 +6,7 @@ from PIL import Image, ImageOps
 from flask import Flask, render_template, make_response
 
 
-CACHE_DIR = os.path.abspath('cache')
+CACHE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cache'))
 
 
 app = Flask(__name__)
