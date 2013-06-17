@@ -19,3 +19,10 @@ curl "http://muro.baixocentro.org/baixocentro.json" > static/baixocentro.json
 ```console
 python app.py
 ```
+
+## Deploy
+
+```console
+git remote add heroku git@heroku.com:spvaiparar.git
+git push heroku master
+```
