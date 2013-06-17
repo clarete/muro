@@ -210,7 +210,7 @@ def rockndroll():
         youtube("occupySP") +
         youtube("vemprarua") +
         youtube("vemprajanela") +
-        youtube("sp17j") +
+        youtube("sp17j")
     )
     data = sorted(data, key=itemgetter('date_posted'), reverse=True)
 
