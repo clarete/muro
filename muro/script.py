@@ -165,7 +165,7 @@ def youtube(tag):
     for item in data['feed']['entry']:
         items.append({
             'media_provider': name.lower(),
-            'media_type': 'image',
+            'media_type': 'video',
             'content': item['media$group']['media$content'][0]['url'],
             'thumb': item['media$group']['media$thumbnail'][0]['url'],
             'author': item['author'][0]['name']['$t'],
