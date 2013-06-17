@@ -82,7 +82,7 @@ a:hover {
 	color: #e70000;
 }
 
-header h1, header h2 {
+header h1, {
 	display: none;
 }  
 
@@ -134,11 +134,10 @@ nav a {
 	padding: 50px 0;
 }
 
-h3 {
-	width: 50%;
-	height: 64px;
+h2 {
+	size: 26pt;
 	float: left;
-	color: #fff;
+	color: :#fff;
 	text-indent: -9999px;
 }
 
