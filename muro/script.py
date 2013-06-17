@@ -204,7 +204,13 @@ def rockndroll():
         instagram("vemprajanela", config['instagram_apikey']) +
         instagram("sp17j", config['instagram_apikey']) +
         picasa(tag) +
-        youtube(tag)
+        youtube(tag) +
+        youtube("passelivre") +
+        youtube("SP13J") +
+        youtube("occupySP") +
+        youtube("vemprarua") +
+        youtube("vemprajanela") +
+        youtube("sp17j") +
     )
     data = sorted(data, key=itemgetter('date_posted'), reverse=True)
 
