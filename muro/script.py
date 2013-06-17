@@ -12,45 +12,45 @@ def timestamp(dt):
     return 1000 * time.mktime(dt.timetuple())
 
 
-def twitter(tag, conf):
-    name = 'Twitter'
-    client = twitter_backend.Twitter(
-        auth=twitter_backend.OAuth(
-            conf['access_token'], conf['access_token_secret'],
-            conf['consumer_key'], conf['consumer_secret'])
-    )
-
-    params = {
-        'q': tag,
-        'rpp': 100,
-        'include_entities': True,
-        'result_type': 'recent',
-    }
-
-    items = []
-
-    data = client.search.tweets(**params)
-
-    for item in data['statuses']:
-        # Sanity check to proceed retrieving things
-        if not 'media' in item['entities']:
-            continue
-
-        # Building the Media item that will be added to the return list
-        items.append({
-            'media_provider': name.lower(),
-            'media_type': 'image',
-            'content': item['entities']['media'][0]['media_url'],
-            'thumb': item['entities']['media'][0]['media_url'],
-            'author': item['from_user'],
-            'width': item['entities']['media'][0]['sizes']['orig']['w'],
-            'height': item['entities']['media'][0]['sizes']['orig']['h'],
-            'original_url': item['entities']['media'][0]['expanded_url'],
-            'date_posted': timestamp(datetime.strptime(
-                item['created_at'],
-                "%a, %d %b %Y %H:%M:%S +0000")),
-        })
-    return items
+#def twitter(tag, conf):
+#    name = 'Twitter'
+#    client = twitter_backend.Twitter(
+#        auth=twitter_backend.OAuth(
+#            conf['access_token'], conf['access_token_secret'],
+#            conf['consumer_key'], conf['consumer_secret'])
+#    )
+#
+#    params = {
+#        'q': tag,
+#        'rpp': 100,
+#        'include_entities': True,
+#        'result_type': 'recent',
+#    }
+#
+#    items = []
+#
+#    data = client.search.tweets(**params)
+#
+#    for item in data['statuses']:
+#        # Sanity check to proceed retrieving things
+#        if not 'media' in item['entities']:
+#            continue
+#
+#        # Building the Media item that will be added to the return list
+#        items.append({
+#            'media_provider': name.lower(),
+#            'media_type': 'image',
+#            'content': item['entities']['media'][0]['media_url'],
+#            'thumb': item['entities']['media'][0]['media_url'],
+#            'author': item['from_user'],
+#            'width': item['entities']['media'][0]['sizes']['orig']['w'],
+#            'height': item['entities']['media'][0]['sizes']['orig']['h'],
+#            'original_url': item['entities']['media'][0]['expanded_url'],
+#            'date_posted': timestamp(datetime.strptime(
+#                item['created_at'],
+#                "%a, %d %b %Y %H:%M:%S +0000")),
+#        })
+#    return items
 
 
 def instagram(tag, api_key):
@@ -189,13 +189,13 @@ def rockndroll():
         flickr("vemprarua", config['flickr_apikey']) +
         flickr("vemprajanela", config['flickr_apikey']) +
         flickr("sp17j", config['flickr_apikey']) +
-        twitter(tag, config['twitter']) +
-        twitter("passelivre", config['twitter']) +
-        twitter("sp13j", config['twitter']) +
-        twitter("occupysp", config['twitter']) +
-        twitter("vemprarua", config['twitter']) +
-        twitter("vemprajanela", config['twitter']) +
-        twitter("sp17j", config['twitter']) +
+#        twitter(tag, config['twitter']) +
+#        twitter("passelivre", config['twitter']) +
+#        twitter("sp13j", config['twitter']) +
+#        twitter("occupysp", config['twitter']) +
+#        twitter("vemprarua", config['twitter']) +
+#        twitter("vemprajanela", config['twitter']) +
+#        twitter("sp17j", config['twitter']) +
         instagram(tag, config['instagram_apikey']) +
         instagram("passelivre", config['instagram_apikey']) +
         instagram("sp13j", config['instagram_apikey']) +
