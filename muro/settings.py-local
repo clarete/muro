@@ -2,11 +2,11 @@
 
 config = {
     'twitter': {
-        'consumer_key': '',
-        'consumer_secret': '',
+        'consumer_key': 'MVqFSlBCEEy6FkZvxwaQ',
+        'consumer_secret': 'blr81dldd24y3D4Y15tAoOLLsOElnBnX2A0syJLQ04',
         'access_token': '-Zt5RYK9faunVJTx1Lpxgoh58eb1xIELDfGkDlh4o',
         'access_token_secret': '',
     },
-    'flickr_apikey' : 'defina a chave',
-    'instagram_apikey' : 'defina a chave',
+    'flickr_apikey' : '83eb241669913b7ffa4857cdf8a6321b',
+    'instagram_apikey' : '0f854a225c9b49df84f1d2ea89f5ca6b',
 }
