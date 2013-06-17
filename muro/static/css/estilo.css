@@ -1,6 +1,6 @@
 html, body {
   background: #fff;
-	font-family: "Helvetica", "Arial", sans-serif;
+  font-family: "Helvetica", "Arial", sans-serif;
 	font-size: 16px;
 	overflow-x:hidden;
 }
@@ -84,7 +84,7 @@ a:hover {
 
 header h1, header h2 {
 	display: none;
-}
+}  
 
 header {
 	width: 240px;
@@ -134,7 +134,7 @@ nav a {
 	padding: 50px 0;
 }
 
-aside#info h3 {
+h3 {
 	width: 50%;
 	height: 64px;
 	float: right;
