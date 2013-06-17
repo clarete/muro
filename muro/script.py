@@ -194,6 +194,7 @@ def rockndroll():
         flickr("acordabrasil", config['flickr_apikey']) +
         flickr("semviolencia", config['flickr_apikey']) +
         flickr("revogaoaumento", config['flickr_apikey']) +
+        flickr("mobajuda", config['flickr_apikey']) +
 #        twitter(tag, config['twitter']) +
 #        twitter("passelivre", config['twitter']) +
 #        twitter("sp13j", config['twitter']) +
@@ -213,6 +214,7 @@ def rockndroll():
         instagram("acordabrasil", config['instagram_apikey']) +
         instagram("semviolencia", config['instagram_apikey']) +
         instagram("revogaoaumento", config['instagram_apikey']) +
+        instagram("mobajuda", config['instagram_apikey']) +
 # markun disse que não está funcionando
 #       picasa(tag) +
         youtube(tag) +
