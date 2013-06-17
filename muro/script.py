@@ -189,6 +189,11 @@ def rockndroll():
         flickr("vemprarua", config['flickr_apikey']) +
         flickr("vemprajanela", config['flickr_apikey']) +
         flickr("sp17j", config['flickr_apikey']) +
+        flickr("vinagre", config['flickr_apikey']) +
+        flickr("protestorj", config['flickr_apikey']) +
+        flickr("acordabrasil", config['flickr_apikey']) +
+        flickr("semviolencia", config['flickr_apikey']) +
+        flickr("revogaoaumento", config['flickr_apikey']) +
 #        twitter(tag, config['twitter']) +
 #        twitter("passelivre", config['twitter']) +
 #        twitter("sp13j", config['twitter']) +
@@ -203,6 +208,11 @@ def rockndroll():
         instagram("vemprarua", config['instagram_apikey']) +
         instagram("vemprajanela", config['instagram_apikey']) +
         instagram("sp17j", config['instagram_apikey']) +
+        instagram("vinagre", config['instagram_apikey']) +
+        instagram("protestorj", config['instagram_apikey']) +
+        instagram("acordabrasil", config['instagram_apikey']) +
+        instagram("semviolencia", config['instagram_apikey']) +
+        instagram("revogaoaumento", config['instagram_apikey']) +
 # markun disse que não está funcionando
 #       picasa(tag) +
         youtube(tag) +
@@ -210,6 +220,10 @@ def rockndroll():
         youtube("SP13J") +
         youtube("occupySP") +
         youtube("vemprarua") +
+        youtube("protestorj") +
+        youtube("acordabrasil") +
+        youtube("semviolencia") +
+        youtube("revogaoaumento") +
         youtube("vemprajanela")# +
 #        youtube("sp17j")
     )
