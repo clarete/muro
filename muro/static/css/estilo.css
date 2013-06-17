@@ -137,9 +137,9 @@ nav a {
 h3 {
 	width: 50%;
 	height: 64px;
-	float: right;
+	float: left;
 	display: block;
-  color: #fff;
+	color: #fff;
 	text-indent: -9999px;
 }
 
