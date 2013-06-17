@@ -203,7 +203,8 @@ def rockndroll():
         instagram("vemprarua", config['instagram_apikey']) +
         instagram("vemprajanela", config['instagram_apikey']) +
         instagram("sp17j", config['instagram_apikey']) +
-        picasa(tag) +
+# markun disse que não está funcionando
+#       picasa(tag) +
         youtube(tag) +
         youtube("passelivre") +
         youtube("SP13J") +
