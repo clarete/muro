@@ -179,7 +179,7 @@ def youtube(tag):
 
 
 def rockndroll():
-    tag = 'baixocentro'
+    tag = 'spvaiparar'
 
     data = (
         flickr(tag, config['flickr_apikey']) +
