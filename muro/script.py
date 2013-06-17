@@ -183,8 +183,26 @@ def rockndroll():
 
     data = (
         flickr(tag, config['flickr_apikey']) +
+        flickr("passelivre", config['flickr_apikey']) +
+        flickr("SP13J", config['flickr_apikey']) +
+        flickr("occupySP", config['flickr_apikey']) +
+        flickr("vemprarua", config['flickr_apikey']) +
+        flickr("vemprajanela", config['flickr_apikey']) +
+        flickr("sp17j", config['flickr_apikey']) +
         twitter(tag, config['twitter']) +
+        twitter("passelivre", config['twitter']) +
+        twitter("sp13j", config['twitter']) +
+        twitter("occupysp", config['twitter']) +
+        twitter("vemprarua", config['twitter']) +
+        twitter("vemprajanela", config['twitter']) +
+        twitter("sp17j", config['twitter']) +
         instagram(tag, config['instagram_apikey']) +
+        instagram("passelivre", config['instagram_apikey']) +
+        instagram("sp13j", config['instagram_apikey']) +
+        instagram("occupysp", config['instagram_apikey']) +
+        instagram("vemprarua", config['instagram_apikey']) +
+        instagram("vemprajanela", config['instagram_apikey']) +
+        instagram("sp17j", config['instagram_apikey']) +
         picasa(tag) +
         youtube(tag)
     )
