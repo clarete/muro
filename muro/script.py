@@ -225,7 +225,6 @@ def rockndroll():
         youtube("protestorj") +
         youtube("semviolencia") +
         youtube("revogaoaumento") +
-        youtube("protestosp") +
         youtube("vemprajanela")# +
 #        youtube("sp17j")
     )
